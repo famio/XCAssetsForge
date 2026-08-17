@@ -5,6 +5,7 @@ import { Stage } from './components/Stage'
 import { sanitizeBaseName } from './lib/domain'
 import { downloadZip } from './lib/exporter'
 import { useForge } from './state/useForge'
+import { t } from './lib/i18n'
 
 export default function App() {
   const forge = useForge()
@@ -51,7 +52,7 @@ export default function App() {
       })
       const result = downloadZip(files, sanitizeBaseName(forge.selected.baseName))
       if (result) {
-        setNotice(`${result.fileName}（${result.count} ファイル）をダウンロードしました`)
+        setNotice(t.downloaded(result.fileName, result.count))
       }
     } catch (cause) {
       forge.setError(cause instanceof Error ? cause.message : String(cause))
@@ -78,14 +79,14 @@ export default function App() {
           the whole window rather than just the sidebar zone. */}
       {forge.isDropTargeted && (
         <div className="drop-overlay" aria-hidden="true">
-          <span className="drop-overlay__label">ドロップして追加</span>
+          <span className="drop-overlay__label">{t.dropToAdd}</span>
         </div>
       )}
 
       {forge.error && (
         <div className="toast" role="alert">
           <span>{forge.error}</span>
-          <button onClick={() => forge.setError(null)}>閉じる</button>
+          <button onClick={() => forge.setError(null)}>{t.close}</button>
         </div>
       )}
       {!forge.error && notice && (

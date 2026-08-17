@@ -11,6 +11,7 @@ import type {
   PreviewRequest,
   TotalRequest,
 } from './protocol'
+import { t } from '../lib/i18n'
 
 const codec: Codec = wasmCodec
 
@@ -44,7 +45,7 @@ async function resizedPixels(id: string, width: number, height: number): Promise
   if (hit) return hit
 
   const source = pixels.get(id)
-  if (!source) throw new Error('画像が見つかりません')
+  if (!source) throw new Error(t.imageNotFound)
   const value =
     source.width === width && source.height === height
       ? source

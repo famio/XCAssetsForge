@@ -14,6 +14,7 @@ import {
   type ExportFormat,
   type Scale,
 } from '../lib/domain'
+import { t } from '../lib/i18n'
 
 export interface SourceImage {
   id: string
@@ -122,7 +123,7 @@ export function useForge() {
     async (files: File[]) => {
       const accepted = files.filter(isAcceptedFile)
       if (accepted.length === 0) {
-        if (files.length > 0) setError('対応していない画像形式です。PNG / JPEG / WebP / AVIF を選んでください。')
+        if (files.length > 0) setError(t.unsupportedFormat)
         return
       }
 
@@ -141,7 +142,7 @@ export function useForge() {
             thumb: info.thumb,
           })
         } catch {
-          setError(`${file.name} を読み込めませんでした。`)
+          setError(t.couldNotLoad(file.name))
         }
       }
       if (loaded.length === 0) return

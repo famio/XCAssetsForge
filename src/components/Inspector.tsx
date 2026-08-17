@@ -9,6 +9,7 @@ import {
 } from '../lib/domain'
 import type { Forge } from '../state/useForge'
 import { SizeTable } from './SizeTable'
+import { t } from '../lib/i18n'
 
 interface Props {
   forge: Forge
@@ -26,8 +27,8 @@ export function Inspector({ forge, onExport }: Props) {
   return (
     <aside className="inspector">
       <div className="group">
-        <span className="section-label">形式</span>
-        <div className="segmented" role="radiogroup" aria-label="形式">
+        <span className="section-label">{t.format}</span>
+        <div className="segmented" role="radiogroup" aria-label={t.format}>
           {FORMATS.map((format) => (
             <button
               key={format}
@@ -44,13 +45,13 @@ export function Inspector({ forge, onExport }: Props) {
       </div>
 
       <div className="group group--quality" data-disabled={qualityDisabled}>
-        <span className="section-label">クオリティ</span>
+        <span className="section-label">{t.quality}</span>
         <div className="quality-row">
           <input
             type="range"
             min={10}
             max={100}
-            aria-label="JPEG クオリティ"
+            aria-label={t.jpegQuality}
             value={forge.quality}
             disabled={qualityDisabled}
             onChange={(event) => forge.setQuality(clampQuality(Number(event.target.value)))}
@@ -58,7 +59,7 @@ export function Inspector({ forge, onExport }: Props) {
           <input
             className="field quality-number"
             inputMode="numeric"
-            aria-label="JPEG クオリティ（数値）"
+            aria-label={t.jpegQualityNumber}
             value={forge.qualityText}
             disabled={qualityDisabled}
             onChange={(event) => forge.setQualityText(event.target.value)}
@@ -71,13 +72,13 @@ export function Inspector({ forge, onExport }: Props) {
       </div>
 
       <div className="group group--size" data-disabled={noImage}>
-        <span className="section-label">サイズ (1x)</span>
+        <span className="section-label">{t.size1x}</span>
 
         <div className="size-row">
           <input
             className="field field--compact size-input"
             inputMode="numeric"
-            aria-label="幅"
+            aria-label={t.width}
             value={forge.widthText}
             onChange={(event) => forge.onWidthChange(event.target.value)}
           />
@@ -85,7 +86,7 @@ export function Inspector({ forge, onExport }: Props) {
           <input
             className="field field--compact size-input"
             inputMode="numeric"
-            aria-label="高さ"
+            aria-label={t.height}
             value={forge.heightText}
             onChange={(event) => forge.onHeightChange(event.target.value)}
           />
@@ -95,8 +96,8 @@ export function Inspector({ forge, onExport }: Props) {
             className="lock-toggle"
             role="switch"
             aria-checked={forge.lockAspect}
-            aria-label="縦横比を固定"
-            title={forge.lockAspect ? '縦横比を固定中' : '縦横比の固定を解除中'}
+            aria-label={t.lockAspectRatio}
+            title={forge.lockAspect ? t.aspectLocked : t.aspectUnlocked}
             onClick={forge.toggleLock}
           >
             <ChainIcon linked={forge.lockAspect} />
@@ -111,17 +112,16 @@ export function Inspector({ forge, onExport }: Props) {
 
         {blockedScales.length > 0 && shortSide > 0 && (
           <p className="cap-note">
-            短辺が {MAX_SHORT_SIDE}px を超えるため {blockedScales.map((s) => `${s}x`).join(' / ')}{' '}
-            は書き出せません。1x の短辺は現在 {shortSide}px です。
+            {t.capNote(blockedScales.map((s) => `${s}x`).join(' / '), MAX_SHORT_SIDE, shortSide)}
           </p>
         )}
       </div>
 
       <div className="group">
-        <span className="section-label">ファイル名</span>
+        <span className="section-label">{t.fileName}</span>
         <input
           className="field"
-          aria-label="ファイル名"
+          aria-label={t.fileName}
           value={forge.selected?.baseName ?? ''}
           disabled={noImage}
           placeholder="asset"
@@ -136,7 +136,7 @@ export function Inspector({ forge, onExport }: Props) {
         disabled={!forge.canExport || forge.isExporting}
         onClick={onExport}
       >
-        {forge.isExporting ? 'ダウンロード中…' : 'ダウンロード'}
+        {forge.isExporting ? t.downloading : t.download}
       </button>
     </aside>
   )
@@ -187,7 +187,7 @@ function ScaleChip({ forge, scale }: { forge: Forge; scale: Scale }) {
       title={
         available
           ? undefined
-          : `1x の短辺が ${limit}px 以下のときに書き出せます（現在 ${Math.min(forge.width, forge.height)}px）`
+          : t.scaleUnavailableForExport(limit, Math.min(forge.width, forge.height))
       }
       onClick={() => forge.toggleScale(scale)}
     >

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { SCALES, clampSplit, fitRect, shortSideLimitFor } from '../lib/domain'
 import type { Forge } from '../state/useForge'
+import { t } from '../lib/i18n'
 
 interface Props {
   forge: Forge
@@ -99,11 +100,11 @@ export function Stage({ forge }: Props) {
 
       {!hasImage && (
         <button type="button" className="stage__empty" onClick={forge.openFilePicker}>
-          <span className="stage__empty-title">画像が選択されていません</span>
+          <span className="stage__empty-title">{t.noImageTitle}</span>
           <span className="stage__empty-body">
-            クリックまたはドラッグ＆ドロップで追加すると
+            {t.noImageBodyLine1}
             <br />
-            PNG と JPEG を並べて比較できます
+            {t.noImageBodyLine2}
           </span>
         </button>
       )}
@@ -125,7 +126,7 @@ export function Stage({ forge }: Props) {
           {/* The stage moves the wipe on pointerdown, so controls sitting on it
               have to keep their clicks to themselves. */}
           <div className="scale-picker" onPointerDown={(event) => event.stopPropagation()}>
-            <div className="scale-picker__options" role="radiogroup" aria-label="比較する倍率">
+            <div className="scale-picker__options" role="radiogroup" aria-label={t.comparisonScale}>
               {SCALES.map((scale) => {
                 const available = forge.availableScales.includes(scale)
                 return (
@@ -138,7 +139,7 @@ export function Stage({ forge }: Props) {
                     title={
                       available
                         ? undefined
-                        : `1x の短辺が ${shortSideLimitFor(scale)}px 以下のときに比較できます`
+                        : t.scaleUnavailableForCompare(shortSideLimitFor(scale))
                     }
                     onClick={() => forge.setPreviewScale(scale)}
                   >
@@ -149,7 +150,7 @@ export function Stage({ forge }: Props) {
             </div>
             <span className="scale-picker__dims">
               {forge.isRendering
-                ? 'エンコード中…'
+                ? t.encoding
                 : `${forge.previewWidth}×${forge.previewHeight}`}
             </span>
           </div>
@@ -166,7 +167,7 @@ export function Stage({ forge }: Props) {
             style={{ left: splitPercent }}
             onPointerDown={onHandleDown}
             role="separator"
-            aria-label="比較スライダー"
+            aria-label={t.comparisonSlider}
             aria-orientation="vertical"
             aria-valuenow={Math.round(forge.split * 100)}
             tabIndex={0}

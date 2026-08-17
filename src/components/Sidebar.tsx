@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { formatBytes } from '../lib/domain'
 import type { Forge, SourceImage } from '../state/useForge'
+import { t } from '../lib/i18n'
 
 interface Props {
   forge: Forge
@@ -39,7 +40,7 @@ export function Sidebar({ forge }: Props) {
         <h1>XCAssetsForge</h1>
       </header>
 
-      <div className="sidebar__header section-label">画像 {forge.images.length} 枚</div>
+      <div className="sidebar__header section-label">{t.imageCount(forge.images.length)}</div>
 
       <div className="sidebar__list">
         {forge.images.map((image) => (
@@ -68,8 +69,8 @@ export function Sidebar({ forge }: Props) {
             </div>
             <button
               className="image-row__remove"
-              title="リストから削除"
-              aria-label={`${image.fileName} をリストから削除`}
+              title={t.removeFromList}
+              aria-label={t.removeImage(image.fileName)}
               onClick={(event) => {
                 event.stopPropagation()
                 forge.remove(image.id)
@@ -99,7 +100,7 @@ export function Sidebar({ forge }: Props) {
           void forge.add(Array.from(event.dataTransfer.files))
         }}
       >
-        クリックして画像を選択
+        {t.chooseImages}
       </button>
 
     </aside>

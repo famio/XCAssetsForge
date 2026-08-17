@@ -1,5 +1,6 @@
 import { FORMAT_LABEL, SCALES, formatBytes, type ExportFormat, type Scale } from '../lib/domain'
 import type { Forge } from '../state/useForge'
+import { t } from '../lib/i18n'
 
 const FORMATS: ExportFormat[] = ['png', 'jpeg']
 
@@ -24,7 +25,7 @@ export function SizeTable({ forge }: { forge: Forge }) {
 
   return (
     <div className="group">
-      <span className="section-label">書き出しサイズ</span>
+      <span className="section-label">{t.exportSize}</span>
 
       <table className="size-table">
         <thead>
@@ -59,7 +60,7 @@ export function SizeTable({ forge }: { forge: Forge }) {
         </tbody>
         <tfoot>
           <tr>
-            <th scope="row">計</th>
+            <th scope="row">{t.total}</th>
             {FORMATS.map((format) => {
               const sum = totalFor(format)
               return (
