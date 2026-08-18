@@ -25,6 +25,16 @@
   --field-ring: rgba(0, 0, 0, 0.2);
   --field-shadow: 0 0 0 0.5px var(--field-ring), inset 0 1px 2px rgba(0, 0, 0, 0.05);
 
+  /*
+   * Three steps, deliberately. The UI had eight sizes inside a 4px range, and
+   * halves like 12.5 and 13.5 were single-use drift rather than a decision.
+   * `base` carries most of the interface; `sm` is for anything that must read
+   * as secondary to it; `lg` is for headings.
+   */
+  --text-sm: 10px;
+  --text-base: 12px;
+  --text-lg: 14px;
+
   --mono: ui-monospace, 'SF Mono', Menlo, monospace;
 
   color-scheme: light;
@@ -46,6 +56,7 @@ body {
   color: var(--ink);
   font-family: -apple-system, 'SF Pro Text', 'Helvetica Neue', 'Hiragino Sans', 'Yu Gothic',
     system-ui, sans-serif;
+  font-size: var(--text-base);
   -webkit-font-smoothing: antialiased;
   overflow: hidden;
 }
@@ -65,7 +76,7 @@ input {
 }
 
 .section-label {
-  font-size: 10.5px;
+  font-size: var(--text-sm);
   font-weight: 600;
   letter-spacing: 0.09em;
   color: var(--ink-secondary);
@@ -79,7 +90,7 @@ input {
   background: var(--field);
   box-shadow: var(--field-shadow);
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: var(--text-base);
   min-width: 0;
 }
 
@@ -129,7 +140,7 @@ input {
 
 .sidebar__brand h1 {
   margin: 0;
-  font-size: 13.5px;
+  font-size: var(--text-lg);
   font-weight: 600;
   letter-spacing: -0.01em;
   color: var(--ink);
@@ -157,7 +168,7 @@ input {
   gap: 6px;
   padding: 10px 14px 12px;
   border-top: 0.5px solid var(--hairline);
-  font-size: 10.5px;
+  font-size: var(--text-sm);
   color: var(--ink-secondary);
 }
 
@@ -203,7 +214,7 @@ input {
 }
 
 .image-row__name {
-  font-size: 12px;
+  font-size: var(--text-base);
   font-weight: 500;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -211,7 +222,7 @@ input {
 }
 
 .image-row__dims {
-  font-size: 9.5px;
+  font-size: var(--text-sm);
   font-family: var(--mono);
   color: var(--ink-secondary);
   /* Dimensions and file size have to stay on one line. */
@@ -240,7 +251,7 @@ input {
   border-radius: 50%;
   display: grid;
   place-items: center;
-  font-size: 13px;
+  font-size: var(--text-lg);
   line-height: 1;
   color: var(--ink-tertiary);
   opacity: 0;
@@ -262,7 +273,7 @@ input {
   border: 1.5px dashed rgba(0, 0, 0, 0.22);
   background: transparent;
   text-align: center;
-  font-size: 11px;
+  font-size: var(--text-base);
   color: var(--ink-secondary);
   line-height: 1.5;
   transition: background 0.12s ease, border-color 0.12s ease;
@@ -388,7 +399,7 @@ input {
   border-radius: 20px;
   background: rgba(0, 0, 0, 0.55);
   color: #fff;
-  font-size: 11px;
+  font-size: var(--text-base);
   font-weight: 600;
   white-space: nowrap;
 }
@@ -416,13 +427,13 @@ input {
 }
 
 .stage__empty-title {
-  font-size: 13px;
+  font-size: var(--text-lg);
   font-weight: 600;
   color: rgba(255, 255, 255, 0.75);
 }
 
 .stage__empty-body {
-  font-size: 11px;
+  font-size: var(--text-base);
   line-height: 1.6;
   color: rgba(255, 255, 255, 0.42);
 }
@@ -470,7 +481,7 @@ input {
 .segmented__option {
   flex: 1;
   border-radius: 5px;
-  font-size: 12px;
+  font-size: var(--text-base);
   font-weight: 600;
   color: var(--ink-muted);
   display: grid;
@@ -490,7 +501,7 @@ input {
 }
 
 .size-row__times {
-  font-size: 11px;
+  font-size: var(--text-base);
   color: var(--ink-tertiary);
 }
 
@@ -551,13 +562,13 @@ input {
 }
 
 .chip__label {
-  font-size: 11px;
+  font-size: var(--text-base);
   font-weight: 600;
   color: var(--ink-secondary);
 }
 
 .chip__dims {
-  font-size: 9.5px;
+  font-size: var(--text-sm);
   font-family: var(--mono);
   color: var(--ink-tertiary);
 }
@@ -582,7 +593,7 @@ input {
 }
 
 .cap-note {
-  font-size: 10.5px;
+  font-size: var(--text-sm);
   line-height: 1.5;
   color: var(--ink-secondary);
 }
@@ -612,7 +623,7 @@ input {
   border-radius: 7px;
   background: var(--accent);
   color: #fff;
-  font-size: 12.5px;
+  font-size: var(--text-base);
   font-weight: 600;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.14);
 }
@@ -638,7 +649,7 @@ input {
   border-radius: 9px;
   background: rgba(28, 28, 30, 0.94);
   color: #fff;
-  font-size: 12px;
+  font-size: var(--text-base);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
   z-index: 10;
 }
@@ -646,7 +657,7 @@ input {
 .toast button,
 .toast__link {
   color: rgba(255, 255, 255, 0.7);
-  font-size: 11px;
+  font-size: var(--text-base);
   text-decoration: underline;
   white-space: nowrap;
 }
@@ -680,7 +691,7 @@ input {
   min-width: 34px;
   padding: 3px 10px;
   border-radius: 20px;
-  font-size: 11px;
+  font-size: var(--text-base);
   font-weight: 600;
   color: rgba(255, 255, 255, 0.65);
 }
@@ -701,7 +712,7 @@ input {
   background: rgba(0, 0, 0, 0.4);
   color: rgba(255, 255, 255, 0.85);
   font-family: var(--mono);
-  font-size: 10.5px;
+  font-size: var(--text-sm);
   white-space: nowrap;
 }
 
@@ -732,7 +743,7 @@ input {
   border-radius: 10px;
   background: var(--accent);
   color: #fff;
-  font-size: 13px;
+  font-size: var(--text-lg);
   font-weight: 600;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
 }
@@ -742,7 +753,7 @@ input {
 .size-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 11px;
+  font-size: var(--text-base);
   font-variant-numeric: tabular-nums;
 }
 
@@ -755,7 +766,7 @@ input {
 }
 
 .size-table thead th {
-  font-size: 10px;
+  font-size: var(--text-sm);
   font-weight: 600;
   color: var(--ink-tertiary);
   padding-bottom: 5px;
