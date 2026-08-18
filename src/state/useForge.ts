@@ -277,9 +277,12 @@ export function useForge() {
       // The first image seeds the base width — never upscaling a small source by
       // default. Later selections keep the width and re-derive the height.
       const seed = widthText === '' ? Math.min(DEFAULT_BASE_WIDTH, image.width) : Number(widthText) || 0
-      applyWidth(String(seed), image, lockAspect)
+      // Both sides are re-seeded from the new source even with the aspect
+      // unlocked. Carrying the previous image's height across encodes the new
+      // one squashed, and the size table reports those wrong bytes as fact.
+      applyWidth(String(seed), image, true)
     },
-    [images, widthText, lockAspect, applyWidth],
+    [images, widthText, applyWidth],
   )
 
   // Seeding for the very first image has to wait until it is in `images`.
