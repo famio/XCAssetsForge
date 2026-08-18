@@ -15,11 +15,9 @@
   // well; a Custom Domain was tried first and lost to it, serving the wrong
   // site. A more specific route wins over a wildcard, which this relies on.
   //
-  // The route only resolves because `xcassets.famio.dev` has a proxied
-  // `AAAA 100::` record. That record was created by the Custom Domain attempt
-  // and the Custom Domain is still registered in the account, so deleting it
-  // would take the DNS record — and the site — with it. Detach it only
-  // alongside creating the record explicitly.
+  // A route brings no DNS of its own, so the hostname resolves only because
+  // the zone holds a proxied `AAAA 100::` record for it. That record is
+  // maintained by hand; removing it takes the site down.
   "routes": [
     { "pattern": "xcassets.famio.dev/*", "zone_name": "famio.dev" }
   ]
