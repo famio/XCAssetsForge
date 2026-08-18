@@ -5,6 +5,8 @@
 Encode PNG and JPEG **for real**, compare them side by side, and build
 `@1x` / `@2x` / `@3x` assets.
 
+**[xcassets.famio.dev](https://xcassets.famio.dev)**
+
 Every image is processed in your browser and never uploaded. The Worker only
 serves static files.
 
