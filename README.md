@@ -33,3 +33,10 @@ npm run build     # 型チェック + 本番ビルド
 npm run serve     # ビルドして wrangler dev で配信
 npm run deploy    # Cloudflare Workers へデプロイ
 ```
+
+## ライセンス
+
+MIT License（[LICENSE](LICENSE)）。
+
+同梱している wasm コーデックなど第三者コンポーネントの表示は
+[THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) にまとめています。
