@@ -47,7 +47,9 @@ export function useForge() {
   const [heightText, setHeightText] = useState('')
   const [lockAspect, setLockAspect] = useState(true)
 
-  const [split, setSplit] = useState(0.52)
+  // Dead centre, so the wipe starts where the scale picker above it sits and
+  // neither format opens with more of the stage than the other.
+  const [split, setSplit] = useState(0.5)
   const [isDropTargeted, setDropTargeted] = useState(false)
 
   /**
