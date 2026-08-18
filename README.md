@@ -1,49 +1,60 @@
 # XCAssetsForge
 
-PNG と JPEG を**実際に書き出して**並べて比較し、`@1x` / `@2x` / `@3x` のアセットを作るツール。
+**English** · [日本語](README.ja.md)
 
-画像はすべてブラウザ内で処理され、どこにも送信されません。Worker は静的ファイルを配信するだけです。
+Encode PNG and JPEG **for real**, compare them side by side, and build
+`@1x` / `@2x` / `@3x` assets.
 
-## 仕組み
+Every image is processed in your browser and never uploaded. The Worker only
+serves static files.
 
-- エンコードは Web Worker 内の **WASM コーデック**（MozJPEG / Squoosh PNG + OxiPNG level 1）、リサイズは Lanczos3。
-  ブラウザ標準の `canvas.toBlob` と違い、どの環境でも同じバイト数・同じ画質になります。
-- 表示しているサイズは推定値ではなく、実際に書き出されるファイルのバイト数です。
-- 比較ビューの PNG 側は自前の背景を持つため、透過部分から JPEG が透けることはありません。
-- 書き出しは `name@1x` / `@2x` / `@3x` を ZIP にまとめてダウンロードします。
-- COOP/COEP でクロスオリジン分離を有効にしており、OxiPNG が全コアを使います（`public/_headers` と
-  `vite.config.ts` の両方で設定。外部ドメインのリソースは読み込めなくなる点に注意）。
+## How it works
 
-## サイズの上限
+- Encoding runs on **WASM codecs** in a Web Worker (MozJPEG / Squoosh PNG +
+  OxiPNG level 1), with Lanczos3 for resizing. Unlike the browser's
+  `canvas.toBlob`, every environment produces the same bytes at the same
+  quality.
+- The sizes on screen are not estimates. They are the byte counts of the files
+  that actually get written.
+- Export bundles `name@1x` / `@2x` / `@3x` into a ZIP.
+- Cross-origin isolation is enabled through COOP/COEP so OxiPNG can use every
+  core (set in both `public/_headers` and `vite.config.ts` — note that this
+  makes cross-origin resources unloadable).
 
-書き出す画像の**短辺は 3000px まで**です。各スケールは自分の短辺で判定され、超えるものは選べません。
+## Size limit
 
-| スケール | 必要な 1x の短辺 |
+The **short side of anything emitted is capped at 3000px**. Each scale is
+checked against its own short side, so anything above the cap cannot be
+selected.
+
+| Scale | Required 1x short side |
 | --- | --- |
-| 1x | 3000px 以下 |
-| 2x | 1500px 以下 |
-| 3x | 1000px 以下 |
+| 1x | 3000px or less |
+| 2x | 1500px or less |
+| 3x | 1000px or less |
 
-## 開発
+## Development
 
 ```sh
 npm install
-npm run dev       # Vite 開発サーバー
-npm run build     # 型チェック + 本番ビルド
-npm run serve     # ビルドして wrangler dev で配信
-npm run deploy    # Cloudflare Workers へデプロイ
+npm run dev       # Vite dev server
+npm run build     # Type check + production build
+npm run serve     # Build and serve through wrangler dev
+npm run deploy    # Deploy to Cloudflare Workers
 ```
 
-デプロイ先は Cloudflare である必要はありません。ただし `Cross-Origin-Opener-Policy:
-same-origin` と `Cross-Origin-Embedder-Policy: require-corp` を配信できることが条件です
-（これが無いと SharedArrayBuffer が使えず、OxiPNG が単一コアに落ちます）。
+Cloudflare is not a requirement. Any host works as long as it can serve
+`Cross-Origin-Opener-Policy: same-origin` and
+`Cross-Origin-Embedder-Policy: require-corp` — without them SharedArrayBuffer is
+unavailable and OxiPNG drops to a single core.
 
-`public/_headers` は Cloudflare / Netlify の記法なので、他のホストに置く場合は同等の
-設定をそのホストの方法で行ってください。
+`public/_headers` uses the Cloudflare / Netlify format, so on another host you
+will need to apply the equivalent configuration in whatever way that host
+provides.
 
-## ライセンス
+## License
 
-MIT License（[LICENSE](LICENSE)）。
+MIT License ([LICENSE](LICENSE)).
 
-同梱している wasm コーデックなど第三者コンポーネントの表示は
-[THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) にまとめています。
+Notices for the bundled third-party components, including the wasm codecs, are
+collected in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
