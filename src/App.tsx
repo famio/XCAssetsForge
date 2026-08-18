@@ -61,9 +61,10 @@ export default function App() {
     }
   }, [forge])
 
+  // Long enough that the sponsor link can be reached, not merely read.
   useEffect(() => {
     if (!notice) return
-    const timer = window.setTimeout(() => setNotice(null), 5000)
+    const timer = window.setTimeout(() => setNotice(null), 8000)
     return () => window.clearTimeout(timer)
   }, [notice])
 
@@ -89,9 +90,20 @@ export default function App() {
           <button onClick={() => forge.setError(null)}>{t.close}</button>
         </div>
       )}
+      {/* The only place the app asks for anything, and it asks once the work is
+          done. COEP blocks subresources rather than navigations, so a plain link
+          belongs here where an external badge image would be refused. */}
       {!forge.error && notice && (
         <div className="toast" role="status">
           <span>{notice}</span>
+          <a
+            className="toast__link"
+            href="https://github.com/sponsors/famio"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {t.supportThisTool}
+          </a>
         </div>
       )}
     </>

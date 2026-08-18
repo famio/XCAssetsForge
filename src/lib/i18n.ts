@@ -20,6 +20,7 @@ const en = {
   chooseImages: 'Click to choose images',
   removeFromList: 'Remove from list',
   removeImage: (fileName: string) => `Remove ${fileName} from the list`,
+  licenses: 'Licenses',
 
   // Stage
   noImageTitle: 'No image selected',
@@ -55,6 +56,7 @@ const en = {
   // App
   dropToAdd: 'Drop to add',
   close: 'Close',
+  supportThisTool: 'Support this tool',
   downloaded: (fileName: string, count: number) =>
     `Downloaded ${fileName} (${count} file${count === 1 ? '' : 's'})`,
 
@@ -76,6 +78,7 @@ const ja: Dictionary = {
   chooseImages: 'クリックして画像を選択',
   removeFromList: 'リストから削除',
   removeImage: (fileName) => `${fileName} をリストから削除`,
+  licenses: 'ライセンス',
 
   noImageTitle: '画像が選択されていません',
   noImageBodyLine1: 'クリックまたはドラッグ＆ドロップで追加すると',
@@ -107,6 +110,7 @@ const ja: Dictionary = {
 
   dropToAdd: 'ドロップして追加',
   close: '閉じる',
+  supportThisTool: 'このツールを支援する',
   downloaded: (fileName, count) => `${fileName}（${count} ファイル）をダウンロードしました`,
 
   unsupportedFormat: '対応していない画像形式です。PNG / JPEG / WebP / AVIF を選んでください。',

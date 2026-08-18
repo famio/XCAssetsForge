@@ -103,6 +103,23 @@ export function Sidebar({ forge }: Props) {
         {t.chooseImages}
       </button>
 
+      <footer className="sidebar__footer">
+        <a
+          href="https://github.com/famio/XCAssetsForge"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          GitHub
+        </a>
+        <span aria-hidden="true">·</span>
+        <a
+          href="https://github.com/famio/XCAssetsForge/blob/main/THIRD-PARTY-NOTICES.md"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {t.licenses}
+        </a>
+      </footer>
     </aside>
   )
 }
