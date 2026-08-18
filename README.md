@@ -34,6 +34,13 @@ npm run serve     # ビルドして wrangler dev で配信
 npm run deploy    # Cloudflare Workers へデプロイ
 ```
 
+デプロイ先は Cloudflare である必要はありません。ただし `Cross-Origin-Opener-Policy:
+same-origin` と `Cross-Origin-Embedder-Policy: require-corp` を配信できることが条件です
+（これが無いと SharedArrayBuffer が使えず、OxiPNG が単一コアに落ちます）。
+
+`public/_headers` は Cloudflare / Netlify の記法なので、他のホストに置く場合は同等の
+設定をそのホストの方法で行ってください。
+
 ## ライセンス
 
 MIT License（[LICENSE](LICENSE)）。
