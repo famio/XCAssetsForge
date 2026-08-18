@@ -322,11 +322,18 @@ export function useForge() {
 
   // MARK: - Rendering
 
+  /**
+   * Renaming rewrites the image object, so depending on `selected` here would
+   * re-run both encodes on every keystroke in the filename field. Only the id
+   * reaches the worker; the name is a label the export puts on the result.
+   */
+  const selectedId = selected?.id ?? null
+
   // The comparison at the previewed scale. Independent of the export format, so
   // switching PNG/JPEG never re-encodes it, and the PNG half is cached across
   // quality changes.
   useEffect(() => {
-    if (!selected || previewWidth <= 0 || previewHeight <= 0) {
+    if (!selectedId || previewWidth <= 0 || previewHeight <= 0) {
       setComparison(EMPTY_PREVIEW)
       setRendering(false)
       return
@@ -338,7 +345,7 @@ export function useForge() {
     // Debounced so dragging the quality slider doesn't queue an encode per frame.
     const timer = window.setTimeout(() => {
       client
-        .preview({ id: selected.id, width: previewWidth, height: previewHeight, quality })
+        .preview({ id: selectedId, width: previewWidth, height: previewHeight, quality })
         .then((result) => {
           if (cancelled) {
             result.png?.close()
@@ -359,13 +366,13 @@ export function useForge() {
       cancelled = true
       window.clearTimeout(timer)
     }
-  }, [client, selected, previewWidth, previewHeight, quality, setComparison])
+  }, [client, selectedId, previewWidth, previewHeight, quality, setComparison])
 
   // Every format/scale combination for the size table. Runs last and streams its
   // results in, so the stage and the total are never held up by it.
   useEffect(() => {
     setSizeTable({})
-    if (!selected || width <= 0 || height <= 0) {
+    if (!selectedId || width <= 0 || height <= 0) {
       setMeasuring(false)
       return
     }
@@ -375,7 +382,7 @@ export function useForge() {
 
     const timer = window.setTimeout(() => {
       client
-        .sizes({ id: selected.id, width, height, quality }, (cell: SizeCell) => {
+        .sizes({ id: selectedId, width, height, quality }, (cell: SizeCell) => {
           if (cancelled) return
           setSizeTable((previous) => ({
             ...previous,
@@ -394,7 +401,7 @@ export function useForge() {
       cancelled = true
       window.clearTimeout(timer)
     }
-  }, [client, selected, width, height, quality])
+  }, [client, selectedId, width, height, quality])
 
   return {
     client,
