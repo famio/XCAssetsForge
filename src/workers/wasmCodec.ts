@@ -5,17 +5,21 @@ import resizeImage from '@jsquash/resize'
 import type { Codec } from './codec'
 
 /**
- * OxiPNG effort, chosen by measurement on a 1080×1080 asset:
+ * OxiPNG effort. How much the levels buy depends heavily on the artwork, so a
+ * single sample is not enough to choose from — measured against three:
  *
- *   level 0   302ms   1,159,876 B
- *   level 1  1290ms   1,027,818 B   ← nearly all of the win
- *   level 2  2631ms   1,022,882 B   (+1.3s for 0.5%)
- *   level 3  7088ms   1,024,321 B   (slower *and* larger)
+ *                       level 1     level 2            level 3
+ *   photo with alpha     61,607     60,618  (-1.6%)    59,921  (-2.7%)
+ *   opaque gradient      93,415     50,909 (-45.5%)    50,912  (-45.5%)
+ *   flat artwork          3,056      2,906  (-4.9%)     2,787  (-8.8%)
  *
- * Level 1 captures the compression that matters; everything above it trades
- * seconds for fractions of a percent.
+ * The gradient is the case that matters: level 1 leaves nearly half the file on
+ * the table, and not because it settles for a worse colour type — both come out
+ * RGB/8-bit, so the whole gap is row-filter choice, which level 1 barely
+ * explores. Level 2 costs about twice the time and lost to level 1 on none of
+ * the three. Level 3 doubles the time again for almost nothing beyond it.
  */
-const OXIPNG_LEVEL = 1
+const OXIPNG_LEVEL = 2
 
 /**
  * Phase 2 codec: MozJPEG and the Squoosh PNG encoder compiled to wasm, plus a
