@@ -62,6 +62,8 @@ const en = {
 
   // Errors
   unsupportedFormat: 'Unsupported image format. Choose PNG, JPEG, WebP or AVIF.',
+  skippedUnsupported: (count: number) =>
+    `Skipped ${count} file${count === 1 ? '' : 's'} in an unsupported format. Choose PNG, JPEG, WebP or AVIF.`,
   couldNotLoad: (fileName: string) => `Could not load ${fileName}.`,
   imageNotFound: 'Image not found',
 }
@@ -114,6 +116,8 @@ const ja: Dictionary = {
   downloaded: (fileName, count) => `${fileName}（${count} ファイル）をダウンロードしました`,
 
   unsupportedFormat: '対応していない画像形式です。PNG / JPEG / WebP / AVIF を選んでください。',
+  skippedUnsupported: (count) =>
+    `${count} 件は対応していない形式のため除外しました。PNG / JPEG / WebP / AVIF を選んでください。`,
   couldNotLoad: (fileName) => `${fileName} を読み込めませんでした。`,
   imageNotFound: '画像が見つかりません',
 }

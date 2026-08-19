@@ -128,6 +128,10 @@ export function useForge() {
         if (files.length > 0) setError(t.unsupportedFormat)
         return
       }
+      // A drop can mix formats. Taking the usable ones silently reads as if the
+      // rest had been taken too, so the ones left out are called out.
+      const skipped = files.length - accepted.length
+      if (skipped > 0) setError(t.skippedUnsupported(skipped))
 
       const loaded: SourceImage[] = []
       for (const file of accepted) {
