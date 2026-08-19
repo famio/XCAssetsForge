@@ -288,7 +288,9 @@ export function useForge() {
       client.release(id)
       images[index].thumb.close()
       const next = images.filter((image) => image.id !== id)
-      setImages(next)
+      // Updater form, so two removals landing in one batch don't each rebuild
+      // the list from the same starting array and lose one of the deletions.
+      setImages((previous) => previous.filter((image) => image.id !== id))
 
       if (selectionId !== id) return
 
