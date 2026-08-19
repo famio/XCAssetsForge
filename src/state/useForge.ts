@@ -171,24 +171,6 @@ export function useForge() {
     input.click()
   }, [add])
 
-  const remove = useCallback(
-    (id: string) => {
-      client.release(id)
-      setImages((previous) => {
-        const index = previous.findIndex((image) => image.id === id)
-        if (index < 0) return previous
-        previous[index].thumb.close()
-        const next = previous.filter((image) => image.id !== id)
-        setSelectionId((current) => {
-          if (current !== id) return current
-          return (next[index] ?? next[next.length - 1])?.id ?? null
-        })
-        return next
-      })
-    },
-    [client],
-  )
-
   const setBaseName = useCallback(
     (name: string) => {
       setImages((previous) =>
@@ -269,6 +251,13 @@ export function useForge() {
     })
   }, [applyWidth, widthText, selected])
 
+  /**
+   * Guards the seeding effect below so a width the user deliberately emptied is
+   * left alone. Cleared when the library empties, because the next image then
+   * has to seed its own size from scratch.
+   */
+  const seededRef = useRef(false)
+
   const select = useCallback(
     (id: string) => {
       setSelectionId(id)
@@ -285,13 +274,46 @@ export function useForge() {
     [images, widthText, applyWidth],
   )
 
+  /**
+   * Sits next to `select` rather than with the rest of the library, because
+   * removing the selected image moves the selection and that has to go through
+   * the same seeding — otherwise whatever is selected next inherits the removed
+   * image's dimensions and gets encoded squashed.
+   */
+  const remove = useCallback(
+    (id: string) => {
+      const index = images.findIndex((image) => image.id === id)
+      if (index < 0) return
+
+      client.release(id)
+      images[index].thumb.close()
+      const next = images.filter((image) => image.id !== id)
+      setImages(next)
+
+      if (selectionId !== id) return
+
+      const fallback = next[index] ?? next[next.length - 1] ?? null
+      if (fallback) {
+        select(fallback.id)
+        return
+      }
+      // Emptying the library also clears the size, so the next image seeds from
+      // itself instead of inheriting the dimensions of one that is gone.
+      setSelectionId(null)
+      setWidthText('')
+      setHeightText('')
+      seededRef.current = false
+    },
+    [client, images, selectionId, select],
+  )
+
   // Seeding for the very first image has to wait until it is in `images`.
-  const seededRef = useRef(false)
   useEffect(() => {
     if (seededRef.current || !selected || widthText !== '') return
     seededRef.current = true
-    applyWidth(String(Math.min(DEFAULT_BASE_WIDTH, selected.width)), selected, lockAspect)
-  }, [selected, widthText, lockAspect, applyWidth])
+    // Always derives the height, for the reason given in `select`.
+    applyWidth(String(Math.min(DEFAULT_BASE_WIDTH, selected.width)), selected, true)
+  }, [selected, widthText, applyWidth])
 
   // MARK: - Settings
 
